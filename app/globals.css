@@ -981,3 +981,39 @@
   }
   @keyframes spinpix { to { transform: rotate(360deg); } }
 }
+
+/* ===== accessibility additions (not in the template) ===== */
+@layer components {
+  :focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+
+  /* .btn and .chip are clipped/bordered: an outline would be cut off by
+     clip-path, so focus reuses the hover colours with a tinted fill. */
+  .btn:focus-visible { outline: none; color: var(--cyan); background: rgba(0,245,255,0.12); }
+  .btn.magenta:focus-visible { color: var(--magenta); background: rgba(255,0,110,0.12); }
+  .btn.yellow:focus-visible { color: var(--yellow); background: rgba(245,255,0,0.1); }
+  .btn.ghost:focus-visible { color: var(--ink); background: rgba(255,255,255,0.06); }
+
+  /* Inputs already glow on :focus. */
+  .field input:focus-visible,
+  .av-search input:focus-visible,
+  .modal .input-row input:focus-visible { outline: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ===== narrow-phone fixes (not in the template) ===== */
+@layer components {
+  /* Four columns don't fit at ~375px: drop the date (the podium still shows
+     it for the top 3) and let the score column size to its content. */
+  @media (max-width: 480px) {
+    .hall-table .th, .hall-table .tr { grid-template-columns: 54px 1fr auto; }
+    .hall-table .th > :nth-child(4), .hall-table .tr .dt { display: none; }
+    .hall-table .th { font-size: 9px; letter-spacing: 0.06em; }
+  }
+}
