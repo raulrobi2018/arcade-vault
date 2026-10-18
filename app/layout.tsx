@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Courier_Prime, JetBrains_Mono, Press_Start_2P } from "next/font/google";
+import { Suspense } from "react";
+import { Footer } from "./components/Footer";
+import { Nav, NavBar } from "./components/Nav";
 import "./globals.css";
 
 const pressStart = Press_Start_2P({
@@ -34,7 +37,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         <div className="av-bg" aria-hidden="true" />
         <div className="av-noise" aria-hidden="true" />
-        <div id="root">{children}</div>
+        <div id="root">
+          <Suspense fallback={<NavBar pathname={null} />}>
+            <Nav />
+          </Suspense>
+          <main className="av-main">{children}</main>
+          <Footer />
+        </div>
       </body>
     </html>
   );

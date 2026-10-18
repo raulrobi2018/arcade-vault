@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Design prototypes that rely on UMD globals (React, GAMES…); not app code.
+    "references/**",
   ]),
 ]);
 
