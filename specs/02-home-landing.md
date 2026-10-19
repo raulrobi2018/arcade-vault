@@ -1,6 +1,6 @@
 # SPEC 02 — Home (landing page)
 
-> **Status:** Aprobado
+> **Status:** Implementado
 > **Depends on:** SPEC 01
 > **Date:** 2026-10-17
 > **Objective:** Implementar en `/` la landing page de `references/templates/home-about/home.jsx` (hero, por qué Arcade Vault, juegos, stats, actividad, precios y CTA final) y mover la Biblioteca a `/juegos`.

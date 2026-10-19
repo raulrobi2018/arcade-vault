@@ -11,7 +11,7 @@ function libraryHref(q: string, cat: CategoryFilter) {
   if (q.trim()) params.set("q", q.trim());
   if (cat !== "TODOS") params.set("cat", cat);
   const qs = params.toString();
-  return qs ? `/?${qs}` : "/";
+  return qs ? `/juegos?${qs}` : "/juegos";
 }
 
 export function LibraryFilters({
