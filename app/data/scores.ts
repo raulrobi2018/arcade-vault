@@ -81,7 +81,7 @@ const SCORES: Record<string, Row[]> = {
     ["PX_KAI", 24830, "2026-04-03"],
     ["MAGENTA88", 21460, "2026-03-16"],
   ],
-  rocas: [
+  asteroids: [
     ["CYBER_LU", 41200, "2026-10-01"],
     ["JOY_STK", 39370, "2026-09-16"],
     ["VECTORX", 36820, "2026-08-28"],
