@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Game } from "@/app/data/games";
+import type { AsteroidsStats } from "@/app/games/asteroids/engine";
+import { AsteroidsArena } from "./AsteroidsArena";
 import { formatScore } from "./format";
 
-// Placeholder player copied from the template: the score climbs on a timer
-// until a real game replaces the arena. Nothing is persisted.
+// Asteroids runs the real engine; every other game keeps the template
+// placeholder, where the score climbs on a timer. Nothing is persisted.
 const TICK_MS = 220;
 const POINTS_PER_LEVEL = 2500;
 const START_LIVES = 3;
@@ -17,20 +19,39 @@ export function GamePlayer({ game }: { game: Game }) {
   const [over, setOver] = useState(false);
   const [name, setName] = useState("INVITADO");
   const [saved, setSaved] = useState(false);
-  const lives = START_LIVES;
-  const level = 1 + Math.floor(score / POINTS_PER_LEVEL);
+  const [lives, setLives] = useState(START_LIVES);
+  const [realLevel, setRealLevel] = useState(1);
+  const [runId, setRunId] = useState(0);
+  const isAsteroids = game.id === "asteroids";
+  const level = isAsteroids
+    ? realLevel
+    : 1 + Math.floor(score / POINTS_PER_LEVEL);
+
+  const handleStats = (stats: AsteroidsStats) => {
+    setScore(stats.score);
+    setLives(stats.lives);
+    setRealLevel(stats.level);
+  };
+
+  const handleGameOver = (finalScore: number) => {
+    setScore(finalScore);
+    setOver(true);
+  };
 
   useEffect(() => {
-    if (over || paused) return;
+    if (isAsteroids || over || paused) return;
     const t = setInterval(
       () => setScore((s) => s + Math.floor(10 + Math.random() * 90)),
       TICK_MS,
     );
     return () => clearInterval(t);
-  }, [over, paused]);
+  }, [isAsteroids, over, paused]);
 
   const restart = () => {
     setScore(0);
+    setLives(START_LIVES);
+    setRealLevel(1);
+    setRunId((id) => id + 1);
     setPaused(false);
     setOver(false);
     setSaved(false);
@@ -81,13 +102,22 @@ export function GamePlayer({ game }: { game: Game }) {
 
       <div className="crt">
         <div className="crt-screen">
-          <div className="game-arena" aria-hidden="true">
-            <div className="grid-floor"></div>
-            <div className="enemy e1"></div>
-            <div className="enemy e2"></div>
-            <div className="enemy e3"></div>
-            <div className="player-ship"></div>
-          </div>
+          {isAsteroids ? (
+            <AsteroidsArena
+              paused={paused || over}
+              runId={runId}
+              onStats={handleStats}
+              onGameOver={handleGameOver}
+            />
+          ) : (
+            <div className="game-arena" aria-hidden="true">
+              <div className="grid-floor"></div>
+              <div className="enemy e1"></div>
+              <div className="enemy e2"></div>
+              <div className="enemy e3"></div>
+              <div className="player-ship"></div>
+            </div>
+          )}
           {paused && (
             <div className="crt-content z-5 bg-black/60">
               <div>
